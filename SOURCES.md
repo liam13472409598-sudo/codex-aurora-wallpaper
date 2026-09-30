@@ -11,3 +11,5 @@ This local package extracts the upstream aurora renderer and adds a standalone C
 The Code-Codex MIT license is included as LICENSE-Code-Codex.txt. It applies to the upstream project's original portions and does not relicense nimitz's shader. The original shader's license evidence is marked conditional by the upstream project; see THIRD_PARTY_NOTICES.md, section 2. This package makes no claim that the complete effect is MIT licensed or cleared for commercial redistribution. Original authorship is retained in source and UI.
 
 Prepared 2026-09-30. No application binaries or original app resources are redistributed.
+
+Version 1.1 adds a Cursor adapter, DOM-only UI construction compatible with Trusted Types, separate app state/ports, and a localhost Python PTY terminal for Claude Code. xterm.js, FitAddon and ws are used under their included MIT licenses.

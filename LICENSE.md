@@ -16,7 +16,7 @@ To the extent licensed rights allow distribution of the adaptation, the renderer
 
 ## New control and runtime code
 
-The independently written `controls.js`, `runtime.mjs`, `build.mjs`, launch scripts and tests are available under the MIT terms below. This does not extend to the shader embedded in the generated bundle.
+The independently written `controls.js`, `panel-template.js`, `adapters.js`, `hosts.mjs`, `runtime.mjs`, `build.mjs`, `terminal/`, launch scripts and tests are available under the MIT terms below. This does not extend to the shader embedded in the generated bundle.
 
 Copyright (c) 2026 Liamkim
 

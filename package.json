@@ -1,20 +1,25 @@
 {
   "name": "codex-aurora-wallpaper",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Adjustable WebGL aurora wallpaper for Codex on macOS",
+  "description": "Adjustable aurora wallpaper for Codex, Cursor and a local Claude Code terminal on macOS",
   "type": "module",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
     "build": "node build.mjs",
-    "check": "node --check runtime.mjs && node --check wallpaper.js",
-    "test": "node tests/renderer.cjs && node tests/integration.cjs",
+    "check": "node --check runtime.mjs && node --check wallpaper.js && node --check hosts.mjs && node --check terminal/server.mjs && node --check terminal/client.js",
+    "test": "node tests/renderer.cjs && node tests/integration.cjs && node tests/hosts.cjs && node tests/terminal.cjs",
     "package": "node scripts/package.mjs"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "devDependencies": {
     "playwright": "1.62.1"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "0.11.0",
+    "@xterm/xterm": "6.0.0",
+    "ws": "8.22.0"
   }
 }

@@ -5,3 +5,5 @@ test-results/
 dist/
 *.log
 .env*
+__pycache__/
+*.pyc

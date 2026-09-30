@@ -1,11 +1,10 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import {spawnSync} from 'node:child_process';
-const files=['src','scripts/node-runtime.zsh','build.mjs','renderer.js','controls.js','wallpaper.js','runtime.mjs','preview.html','启用极光壁纸.command','恢复原界面.command','预览壁纸.command','README.md','使用说明.md','SOURCES.md','LICENSE.md','LICENSE-Code-Codex.txt','THIRD_PARTY_NOTICES.md','docs/preview.png'];
-const root=process.cwd();const name='Codex-Aurora-Wallpaper-macOS';
-const stage=path.join(root,'dist',name);
-fs.mkdirSync(stage,{recursive:true});
-for(const file of files){const dest=path.join(stage,file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.cpSync(path.join(root,file),dest,{recursive:true});}
-const result=spawnSync('/usr/bin/ditto',['-c','-k','--norsrc','--keepParent',stage,path.join(root,'dist',name+'.zip')],{stdio:'inherit'});
-if(result.status!==0)process.exit(result.status||1);
-console.log('dist/'+name+'.zip');
+import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import crypto from 'node:crypto';import {spawnSync} from 'node:child_process';
+const files=['src','scripts/node-runtime.zsh','build.mjs','adapters.js','hosts.mjs','panel-template.js','renderer.js','controls.js','wallpaper.js','runtime.mjs','preview.html','terminal/index.html','terminal/client.js','terminal/server.mjs','terminal/pty-host.py','terminal/terminal.css','启用极光壁纸.command','恢复原界面.command','启用Cursor极光.command','恢复Cursor界面.command','启用ClaudeCode极光终端.command','关闭ClaudeCode极光终端.command','预览壁纸.command','README.md','使用说明.md','SOURCES.md','LICENSE.md','LICENSE-Code-Codex.txt','THIRD_PARTY_NOTICES.md','docs/preview.png','docs/claude-terminal.png','package.json','package-lock.json','node_modules/ws','node_modules/@xterm/xterm','node_modules/@xterm/addon-fit'];
+const root=process.cwd(),name='Code-Aurora-Wallpaper-macOS',scratch=fs.mkdtempSync(path.join(os.tmpdir(),'aurora-package-')),stage=path.join(scratch,name),dist=path.join(root,'dist');
+fs.mkdirSync(stage);fs.mkdirSync(dist,{recursive:true});
+try{
+ for(const file of files){const dest=path.join(stage,file);fs.mkdirSync(path.dirname(dest),{recursive:true});fs.cpSync(path.join(root,file),dest,{recursive:true});}
+ const archive=path.join(dist,name+'.zip');const zipCode="import pathlib,sys,zipfile\nbase=pathlib.Path(sys.argv[1])\nwith zipfile.ZipFile(sys.argv[2],'w',zipfile.ZIP_DEFLATED) as z:\n for p in sorted(base.rglob('*')):\n  if p.is_file():z.write(p,pathlib.Path(base.name)/p.relative_to(base))\n";
+ const result=spawnSync('/usr/bin/env',['python3','-c',zipCode,stage,archive],{stdio:'inherit'});if(result.status!==0)throw Error('ZIP 打包失败');
+ fs.writeFileSync(path.join(dist,'SHA256SUMS.txt'),crypto.createHash('sha256').update(fs.readFileSync(archive)).digest('hex')+'  '+name+'.zip\n');console.log('dist/'+name+'.zip');
+}finally{fs.rmSync(scratch,{recursive:true,force:true});}

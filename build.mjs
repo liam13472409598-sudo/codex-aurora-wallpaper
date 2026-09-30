@@ -5,5 +5,7 @@ import {fileURLToPath} from 'node:url';
 const dir=path.dirname(fileURLToPath(import.meta.url));
 const renderer=stripTypeScriptTypes(fs.readFileSync(path.join(dir,'src/renderer.ts'),'utf8')).replace(/export \{[^}]+\};?\s*$/,'').replace(/[ \t]+$/gm,'').trimEnd()+'\n';
 fs.writeFileSync(path.join(dir,'renderer.js'),renderer);
+const adapters=fs.readFileSync(path.join(dir,'adapters.js'),'utf8');
+const panel=fs.readFileSync(path.join(dir,'panel-template.js'),'utf8');
 const controls=fs.readFileSync(path.join(dir,'controls.js'),'utf8');
-fs.writeFileSync(path.join(dir,'wallpaper.js'),`(()=>{if(window.__codexAurora)return;\n${renderer}\n${controls}\n})();`);
+fs.writeFileSync(path.join(dir,'wallpaper.js'),`(()=>{if(window.__codexAurora)return;\n${renderer}\n${adapters}\n${panel}\n${controls}\n})();`);

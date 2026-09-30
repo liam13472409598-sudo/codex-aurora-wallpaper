@@ -1,26 +1,42 @@
-# Codex Aurora Wallpaper · 极光动态壁纸
+# Code Aurora Wallpaper · 极光动态壁纸
 
-为 macOS 上的 Codex 添加实时极光背景和中文参数面板。17 个数值参数、三档画质、四种预设，支持自动保存、暂停、导入导出和一键还原。
+为 **Codex、Cursor 和 Claude Code 终端**提供同一套实时极光与中文控制面板。17 个数值参数、三档画质、四种预设，支持自动保存、暂停、参数导入导出和独立恢复。
 
 ![极光与中文控制面板预览](docs/preview.png)
 
-> 图中是独立预览页的演示布局。壁纸可以加载到真实 Codex 主窗口；本项目是非官方定制，与 OpenAI 无关联。
+上图为独立预览页。非官方定制项目，与 OpenAI、Anysphere 或 Anthropic 无关联。
 
-## 下载与启用
+## 下载和使用
 
-1. 从 [Releases](https://github.com/liam13472409598-sudo/codex-aurora-wallpaper/releases/latest) 下载 `Codex-Aurora-Wallpaper-macOS.zip` 并解压。
-2. 等待当前 Codex 任务完成并保存输入，然后双击 **启用极光壁纸.command**。
-3. 首次启用需重开 Codex，启动器会先提示；完成后点击右上角的 **✦ 极光**。
+从 [Releases](https://github.com/liam13472409598-sudo/codex-aurora-wallpaper/releases/latest) 下载 `Code-Aurora-Wallpaper-macOS.zip` 并解压，保留完整目录。
 
-通过启动器开启应用时，壁纸会被自动加载。普通方式重开 Codex 不会自动启用壁纸。
+| 使用位置 | 启动 | 恢复或关闭 |
+| --- | --- | --- |
+| Codex 桌面应用 | `启用极光壁纸.command` | `恢复原界面.command` |
+| Cursor 桌面应用 | `启用Cursor极光.command` | `恢复Cursor界面.command` |
+| Claude Code 命令行 | `启用ClaudeCode极光终端.command` | `关闭ClaudeCode极光终端.command` |
+| 独立预览 | `预览壁纸.command` | 关闭浏览器标签页 |
 
-想先体验效果，可双击 **预览壁纸.command**。完整移除壁纸和设置入口，双击 **恢复原界面.command**。
+双击对应 `.command` 文件即可。若 macOS 未直接执行，可在终端进入解压目录运行 `zsh ./启用Cursor极光.command` 等对应命令。
 
-如果 macOS 没有直接执行 `.command`，可在终端进入解压目录后运行：
+Codex / Cursor 首次启用需要正常重开应用，启动器会提示。请先等待当前任务完成并保存输入。启动后通过右上角 **✦ 极光** 调节。以后通过对应启动器打开，才会自动加载壁纸。
 
-```sh
-zsh ./启用极光壁纸.command
-```
+**从 v1.0 升级：先用旧目录里的恢复脚本停用旧版，再解压新版启用。**
+
+## Claude Code 的接入方式
+
+Claude Code 版使用一个独立的本机终端窗口，带真实 PTY、终端快捷键、中文输入和自动尺寸适配。Google Chrome 已安装时以独立应用窗口打开，否则使用默认浏览器。
+
+- 已安装 `claude`：自动运行 Claude Code，并使用它现有的登录与配置。
+- 未安装 `claude`：打开普通登录 shell，并显示安装提示；按 [官方说明](https://code.claude.com/docs/en/overview) 安装和登录后，输入 `claude` 即可。
+- 点击「新终端」或关闭窗口会结束当前终端会话；可在支持的情况下使用 Claude Code 的会话恢复功能。
+- 默认工作目录是解压目录，可在终端中 `cd` 到项目后执行 `claude`。也可以运行 `node terminal/server.mjs start --cwd /path/to/project`。
+
+![Claude Code 极光终端的测试界面](docs/claude-terminal.png)
+
+上图是终端连通性演示，不是已登录 Claude Code 的截图。本机测试环境未安装 `claude` 命令，所以验收范围为终端与壁纸，未执行实际 Claude Code 对话。
+
+**不向 Claude 桌面应用注入。** 本机 Claude Desktop 1.46388.4 明确拒绝携带调试开关启动，无法沿用 Codex / Cursor 的接入方式；本项目不修改该应用或绕过它的限制。需要的是桌面 Code 页面背景时，这一版本不支持。
 
 ## 参数
 
@@ -32,24 +48,25 @@ zsh ./启用极光壁纸.command
 | 开场 | 时长、羽化、光幕起点与终点、天空显现、星尘延迟 |
 | 渲染 | 轻量 32 层 / 均衡 50 层 / 精细 72 层 |
 
-预设为 **默认、静谧工作、翡翠光幕、紫色星海**。滑块旁的数字可直接编辑。参数自动保存，JSON 文件可在预览页与 Codex 之间导入导出。
+预设：**默认、静谧工作、翡翠光幕、紫色星海**。滑块旁数字可直接编辑。三个应用分别保存设置，也能通过 JSON 导入导出共享预设。
 
-最高约 30 FPS，窗口文档隐藏时暂停绘制；支持自适应分辨率、暂停／继续、重播开场和显卡上下文恢复。
+最高约 30 FPS，文档隐藏时暂停；支持自适应分辨率、暂停／继续、重播开场和显卡上下文恢复。Cursor 建议使用深色主题以保持编辑器语法颜色易读。
 
-## 运行方式与兼容性
+## 依赖与运行方式
 
-- macOS，安装在 `/Applications/ChatGPT.app` 或 `/Applications/Codex.app` 的 Codex 桌面应用。
-- 优先使用应用自带的 Node.js，备用为 Codex 工作区运行时或 PATH 中的 Node.js 22+。
-- 通过 `127.0.0.1:9347` 的本机 CDP 通道注入；先核对监听进程属于官方应用，再加载壁纸。
-- 不修改应用包、`app.asar`、代码签名或登录配置。
-- “恢复原界面”移除壁纸并停止守护程序；普通方式退出重开 Codex 后，调试端口也会关闭。
-- 已在本机 Codex 主窗口启用并检查渲染器状态。Codex 界面更新后可能需要调整兼容选择器；这不是官方壁纸接口。
+- macOS。Codex / Cursor 安装在 `/Applications`。
+- 启动器优先查找 Codex 自带的 Node.js，再查找当前用户的 Codex 工作区运行时和 PATH 中的 Node.js 22+。未安装 Codex 的用户可单独安装 Node.js。
+- Claude Code 极光终端还需要 Python 3。发行 ZIP 已包含 xterm.js、FitAddon、ws，无需 npm 安装运行依赖。
+- Codex 使用 `127.0.0.1:9347`，Cursor 使用 `127.0.0.1:9348`；两者各有独立守护程序和还原入口。
+- 桌面适配先核对监听进程属于目标官方应用，再核对窗口 URL 和根节点。不会修改应用包、`app.asar`、代码签名或登录配置。
+- 终端服务使用随机本机端口和每次启动生成的访问令牌，校验 Host、WebSocket Origin 和令牌。关闭脚本会结束终端进程并关闭服务。
+- 不记录终端内容；运行状态、令牌与日志保存在被 Git 忽略的 `.runtime/` 内。
 
-更多说明见 [使用说明](使用说明.md)。
+已在本机 Codex 主窗口检查启用状态，在 Cursor 3.22.7 实际打开并查看极光及面板。应用更新后可能需要调整选择器。这不是任何厂商提供的官方壁纸接口。
 
-## 开发
+## 开发与测试
 
-构建需要 Node.js 24。运行已有发行包不需要 npm 安装依赖。
+构建使用 Node.js 24。源代码使用者先安装依赖：
 
 ```sh
 npm ci
@@ -59,22 +76,18 @@ npx playwright install chromium
 npm test
 ```
 
-测试也可使用本机 Chrome：
+也可使用本机 Chrome：
 
 ```sh
 CHROME_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" npm test
 ```
 
-在 macOS 上生成发行 ZIP：
+测试覆盖 WebGL、画质、持久化、暂停恢复、上下文恢复、CDP 注入、Trusted Types 限制、各应用隔离、JSON 导入导出、真实 PTY、连接鉴权和进程清理。发布预览只使用无私人内容的演示页。
 
-```sh
-npm run package
-```
-
-测试覆盖真实 WebGL 渲染、三档画质、持久化、暂停恢复、上下文丢失恢复、缩放、CDP 注入、参数导入导出和清理。运行日志、测试结果和用户设置不进入仓库或发行包。
+macOS 打包：`npm run package`。更多说明见 [使用说明](使用说明.md)。
 
 ## 来源与许可
 
-极光基于 **nimitz (@stormoid)** 的 [Auroras](https://www.shadertoy.com/view/XtGGRt)，渲染器改编自 [Rice-dog/code-codex](https://github.com/Rice-dog/code-codex)。本项目加入独立控制面板、macOS 启停脚本、阅读参数和渲染恢复修复。
+极光基于 **nimitz (@stormoid)** 的 [Auroras](https://www.shadertoy.com/view/XtGGRt)，渲染器改编自 [Rice-dog/code-codex](https://github.com/Rice-dog/code-codex)。本项目加入独立控制面板、应用适配、本机终端、阅读参数和渲染恢复修复。
 
-**整个效果不适用统一 MIT 许可。** 原 Shader 的许可证据在上游仍标为有条件适用；相关非商业、署名与相同方式共享条款及其边界，见 [LICENSE.md](LICENSE.md)、[SOURCES.md](SOURCES.md) 和 [上游第三方声明](THIRD_PARTY_NOTICES.md)。
+**整个效果不适用统一 MIT 许可。** 原 Shader 的许可证据在上游仍标为有条件适用；条款及边界见 [LICENSE.md](LICENSE.md)、[SOURCES.md](SOURCES.md) 和 [上游第三方声明](THIRD_PARTY_NOTICES.md)。终端使用的 xterm.js、FitAddon、ws 均在发行包内保留其 MIT 许可证。

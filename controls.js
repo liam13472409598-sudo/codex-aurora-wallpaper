@@ -25,6 +25,7 @@ function normalize(raw) {
  return x;
 }
 let settings; try {settings=normalize(JSON.parse(localStorage.getItem(KEY)||'{}'));} catch {settings={...defaults};}
+if (window.__auroraHostConfig?.settings) settings=normalize(window.__auroraHostConfig.settings);
 const root = document.documentElement;
 const layer = document.createElement('div'); layer.id='codex-aurora-layer'; layer.setAttribute('aria-hidden','true');
 layer.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#070e18;';
@@ -118,5 +119,5 @@ $('#import').onclick=()=>$('.import').click();$('.import').onchange=async e=>{tr
 function storage(e){if(e.key===KEY){try{settings=normalize(JSON.parse(e.newValue||'{}'));sync();}catch{}}}
 window.addEventListener('storage',storage);
 document.body.append(panelHost);
-window.__codexAurora={version:'1.1.0',host:HOST,getSettings:()=>({...settings}),getStatus:()=>({enabled:settings.enabled,error,canvas:[canvas.width,canvas.height],renderer:!!renderer}),setSettings:v=>{settings=normalize({...settings,...v});sync();},show:()=>show(true),dispose:()=>{if(disposed)return;settings.enabled=false;apply();clearTimeout(saveTimer);persist();disposed=true;window.removeEventListener('storage',storage);panelHost.remove();delete window.__codexAurora;}};
+window.__codexAurora={version:'1.2.0',host:HOST,getSettings:()=>({...settings}),getStatus:()=>({enabled:settings.enabled,error,canvas:[canvas.width,canvas.height],renderer:!!renderer}),setSettings:v=>{settings=normalize({...settings,...v});sync();},show:()=>show(true),dispose:()=>{if(disposed)return;settings.enabled=false;apply();clearTimeout(saveTimer);persist();disposed=true;window.removeEventListener('storage',storage);panelHost.remove();delete window.__codexAurora;}};
 sync();

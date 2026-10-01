@@ -803,6 +803,13 @@ function auroraAdapterStyles(host) {
 html[data-codex-aurora] {background:#070e18!important;color-scheme:dark;}
 html[data-codex-aurora] body {background:transparent!important;isolation:isolate;}
 `;
+ if(host==='antigravity') return base+`
+html[data-codex-aurora] #root {position:relative;z-index:0;background:transparent!important;}
+html[data-codex-aurora] #root .bg-background {background:transparent!important;}
+html[data-codex-aurora] #root .bg-sidebar {background:rgba(7,15,25,.38)!important;}
+html[data-codex-aurora] #root :is(.bg-card,.bg-popover,.bg-input) {background:rgba(10,22,34,var(--aurora-glass,.72))!important;}
+html[data-codex-aurora] :is([role=dialog],[role=menu],[role=listbox],[data-radix-popper-content-wrapper]) {background:#102030!important;}
+`;
  if(host==='cursor') return base+`
 html[data-codex-aurora] body > div:has(.monaco-workbench) {background:transparent!important;}
 html[data-codex-aurora] :is(.monaco-workbench,.workspace-container,.workspaces-container,.agent-panel) {
@@ -1189,6 +1196,7 @@ function normalize(raw) {
  return x;
 }
 let settings; try {settings=normalize(JSON.parse(localStorage.getItem(KEY)||'{}'));} catch {settings={...defaults};}
+if (window.__auroraHostConfig?.settings) settings=normalize(window.__auroraHostConfig.settings);
 const root = document.documentElement;
 const layer = document.createElement('div'); layer.id='codex-aurora-layer'; layer.setAttribute('aria-hidden','true');
 layer.style.cssText='position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:#070e18;';
@@ -1282,7 +1290,7 @@ $('#import').onclick=()=>$('.import').click();$('.import').onchange=async e=>{tr
 function storage(e){if(e.key===KEY){try{settings=normalize(JSON.parse(e.newValue||'{}'));sync();}catch{}}}
 window.addEventListener('storage',storage);
 document.body.append(panelHost);
-window.__codexAurora={version:'1.1.0',host:HOST,getSettings:()=>({...settings}),getStatus:()=>({enabled:settings.enabled,error,canvas:[canvas.width,canvas.height],renderer:!!renderer}),setSettings:v=>{settings=normalize({...settings,...v});sync();},show:()=>show(true),dispose:()=>{if(disposed)return;settings.enabled=false;apply();clearTimeout(saveTimer);persist();disposed=true;window.removeEventListener('storage',storage);panelHost.remove();delete window.__codexAurora;}};
+window.__codexAurora={version:'1.2.0',host:HOST,getSettings:()=>({...settings}),getStatus:()=>({enabled:settings.enabled,error,canvas:[canvas.width,canvas.height],renderer:!!renderer}),setSettings:v=>{settings=normalize({...settings,...v});sync();},show:()=>show(true),dispose:()=>{if(disposed)return;settings.enabled=false;apply();clearTimeout(saveTimer);persist();disposed=true;window.removeEventListener('storage',storage);panelHost.remove();delete window.__codexAurora;}};
 sync();
 
 })();

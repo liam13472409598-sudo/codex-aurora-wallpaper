@@ -1,10 +1,10 @@
 # Code Aurora Wallpaper · 极光动态壁纸
 
-为 **Codex、Cursor 和 Claude Code 终端**提供同一套实时极光与中文控制面板。17 个数值参数、三档画质、四种预设，支持自动保存、暂停、参数导入导出和独立恢复。
+为 **Codex、Cursor、Antigravity 和 Claude Code 终端**提供同一套实时极光与中文控制面板。17 个数值参数、三档画质、四种预设，支持自动保存、暂停、参数导入导出和独立恢复。
 
 ![极光与中文控制面板预览](docs/preview.png)
 
-上图为独立预览页。非官方定制项目，与 OpenAI、Anysphere 或 Anthropic 无关联。
+上图为独立预览页。非官方定制项目，与 OpenAI、Anysphere、Google 或 Anthropic 无关联。
 
 ## 下载和使用
 
@@ -14,14 +14,23 @@
 | --- | --- | --- |
 | Codex 桌面应用 | `启用极光壁纸.command` | `恢复原界面.command` |
 | Cursor 桌面应用 | `启用Cursor极光.command` | `恢复Cursor界面.command` |
+| Antigravity 2.x 桌面应用 | `启用Antigravity极光.command` | `恢复Antigravity界面.command` |
 | Claude Code 命令行 | `启用ClaudeCode极光终端.command` | `关闭ClaudeCode极光终端.command` |
 | 独立预览 | `预览壁纸.command` | 关闭浏览器标签页 |
 
 双击对应 `.command` 文件即可。若 macOS 未直接执行，可在终端进入解压目录运行 `zsh ./启用Cursor极光.command` 等对应命令。
 
-Codex / Cursor 首次启用需要正常重开应用，启动器会提示。请先等待当前任务完成并保存输入。启动后通过右上角 **✦ 极光** 调节。以后通过对应启动器打开，才会自动加载壁纸。
+Codex / Cursor / Antigravity 首次启用需要正常重开应用，启动器会提示。请先等待当前任务完成并保存输入。启动后通过右上角 **✦ 极光** 调节。以后通过对应启动器打开，才会自动加载壁纸。
 
 **从 v1.0 升级：先用旧目录里的恢复脚本停用旧版，再解压新版启用。**
+
+## Antigravity 的接入方式
+
+适配 Antigravity 2.x 独立桌面应用（本机验证版本 2.18.1），不是旧版 Antigravity IDE 或浏览器网页。保留原有输入和工作区布局，在背景加入极光，右上角提供同样的 17 个参数与预设。建议使用深色主题。
+
+Antigravity 每次启动会更换本地网页地址，因此参数另存于 `.runtime/antigravity/settings.json`，守护程序约每 2.5 秒同步一次；调整后请稍等再退出。已验证恢复原界面、重新启动与跨地址参数保留。
+
+![Antigravity 极光与中文参数面板](docs/antigravity.png)
 
 ## Claude Code 的接入方式
 
@@ -48,21 +57,21 @@ Claude Code 版使用一个独立的本机终端窗口，带真实 PTY、终端�
 | 开场 | 时长、羽化、光幕起点与终点、天空显现、星尘延迟 |
 | 渲染 | 轻量 32 层 / 均衡 50 层 / 精细 72 层 |
 
-预设：**默认、静谧工作、翡翠光幕、紫色星海**。滑块旁数字可直接编辑。三个应用分别保存设置，也能通过 JSON 导入导出共享预设。
+预设：**默认、静谧工作、翡翠光幕、紫色星海**。滑块旁数字可直接编辑。各应用分别保存设置，也能通过 JSON 导入导出共享预设。
 
 最高约 30 FPS，文档隐藏时暂停；支持自适应分辨率、暂停／继续、重播开场和显卡上下文恢复。Cursor 建议使用深色主题以保持编辑器语法颜色易读。
 
 ## 依赖与运行方式
 
-- macOS。Codex / Cursor 安装在 `/Applications`。
+- macOS。Codex / Cursor / Antigravity 安装在 `/Applications`。
 - 启动器优先查找 Codex 自带的 Node.js，再查找当前用户的 Codex 工作区运行时和 PATH 中的 Node.js 22+。未安装 Codex 的用户可单独安装 Node.js。
 - Claude Code 极光终端还需要 Python 3。发行 ZIP 已包含 xterm.js、FitAddon、ws，无需 npm 安装运行依赖。
-- Codex 使用 `127.0.0.1:9347`，Cursor 使用 `127.0.0.1:9348`；两者各有独立守护程序和还原入口。
+- Codex 使用 `127.0.0.1:9347`，Cursor 使用 `127.0.0.1:9348`，Antigravity 使用 `127.0.0.1:9349`；三者各有独立守护程序和还原入口。
 - 桌面适配先核对监听进程属于目标官方应用，再核对窗口 URL 和根节点。不会修改应用包、`app.asar`、代码签名或登录配置。
 - 终端服务使用随机本机端口和每次启动生成的访问令牌，校验 Host、WebSocket Origin 和令牌。关闭脚本会结束终端进程并关闭服务。
 - 不记录终端内容；运行状态、令牌与日志保存在被 Git 忽略的 `.runtime/` 内。
 
-已在本机 Codex 主窗口检查启用状态，在 Cursor 3.22.7 实际打开并查看极光及面板。应用更新后可能需要调整选择器。这不是任何厂商提供的官方壁纸接口。
+已在本机 Codex 主窗口检查启用状态，在 Cursor 3.22.7 和 Antigravity 2.18.1 实际打开并查看极光及面板。应用更新后可能需要调整选择器。这不是任何厂商提供的官方壁纸接口。
 
 ## 开发与测试
 

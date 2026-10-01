@@ -3,6 +3,13 @@ function auroraAdapterStyles(host) {
 html[data-codex-aurora] {background:#070e18!important;color-scheme:dark;}
 html[data-codex-aurora] body {background:transparent!important;isolation:isolate;}
 `;
+ if(host==='antigravity') return base+`
+html[data-codex-aurora] #root {position:relative;z-index:0;background:transparent!important;}
+html[data-codex-aurora] #root .bg-background {background:transparent!important;}
+html[data-codex-aurora] #root .bg-sidebar {background:rgba(7,15,25,.38)!important;}
+html[data-codex-aurora] #root :is(.bg-card,.bg-popover,.bg-input) {background:rgba(10,22,34,var(--aurora-glass,.72))!important;}
+html[data-codex-aurora] :is([role=dialog],[role=menu],[role=listbox],[data-radix-popper-content-wrapper]) {background:#102030!important;}
+`;
  if(host==='cursor') return base+`
 html[data-codex-aurora] body > div:has(.monaco-workbench) {background:transparent!important;}
 html[data-codex-aurora] :is(.monaco-workbench,.workspace-container,.workspaces-container,.agent-panel) {

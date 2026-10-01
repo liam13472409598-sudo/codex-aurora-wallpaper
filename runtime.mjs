@@ -4,10 +4,12 @@ import {fileURLToPath} from 'node:url';
 import {spawn,spawnSync} from 'node:child_process';
 import net from 'node:net';
 import {getHost} from './hosts.mjs';
+import {createSettingsStore} from './settings-store.mjs';
 const APP=getHost();
 const DIR=path.dirname(fileURLToPath(import.meta.url));
 const PORT=APP.port, BASE=`http://127.0.0.1:${PORT}`, STATE=path.join(DIR,'.runtime',APP.id);
 fs.mkdirSync(STATE,{recursive:true,mode:0o700});
+const settingsStore=APP.persistSettings?createSettingsStore(path.join(STATE,'settings.json')):null;
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const pidFile=path.join(STATE,'watcher.pid');
 const stopFile=path.join(STATE,'stop');
@@ -44,10 +46,11 @@ async function inject(enable=false){
    const safe=await cdp(t.webSocketDebuggerUrl,`(${APP.probe})`);
    if(!safe)continue;
    const installed=await cdp(t.webSocketDebuggerUrl,'window.__codexAurora?.version');
-   if(!installed)await cdp(t.webSocketDebuggerUrl,`window.__auroraHostConfig=${JSON.stringify({id:APP.id})};\n${code}`);
+   if(!installed)await cdp(t.webSocketDebuggerUrl,`window.__auroraHostConfig=${JSON.stringify({id:APP.id,settings:settingsStore?.load()})};\n${code}`);
    if(enable)await cdp(t.webSocketDebuggerUrl,'window.__codexAurora?.setSettings({enabled:true})');
    const result=await cdp(t.webSocketDebuggerUrl,'window.__codexAurora?.getStatus()');
    if(result?.error)throw Error(result.error);
+   if(settingsStore)settingsStore.save(t.id,await cdp(t.webSocketDebuggerUrl,'window.__codexAurora?.getSettings()'));
    if(result)applied++;
   }catch(e){console.error('窗口注入：',e.message);}
  }
